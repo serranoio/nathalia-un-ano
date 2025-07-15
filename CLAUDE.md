@@ -24,3 +24,5 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Entry point: `index.html` loads `src/my-element.ts` as ES module
 - Single component architecture with potential for expansion
 - Static assets in `src/assets/` and `public/` directories
+
+IMPORTANT Dont test implentation by running dev server

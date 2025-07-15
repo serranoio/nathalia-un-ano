@@ -4,59 +4,33 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + Lit + TS</title>
+    <title>Arcane Thank You Card - Jinx Style</title>
     <link rel="stylesheet" href="./src/index.css" />
     <script type="module" src="/src/my-element.ts"></script>
     <style>
-
-:root {
-   /* Primary Colors - Jinx's Signature Palette */
-   --electric-blue: #00BFFF;
-  --hot-pink: #FF69B4;
-  --neon-purple: #9400D3;
-  --bright-cyan: #00FFFF;
-  
-  /* Electric Blue Variants */
-  --electric-blue-light: #1AC6FF;  /* 10% lighter */
-  --electric-blue-dark: #00ACE6;   /* 10% darker */
-  
-  /* Hot Pink Variants */
-  --hot-pink-light: #FF7BC0;       /* 10% lighter */
-  --hot-pink-dark: #E65FA2;        /* 10% darker */
-  
-  /* Neon Purple Variants */
-  --neon-purple-light: #A519E6;    /* 10% lighter */
-  --neon-purple-dark: #8500BF;     /* 10% darker */
-  
-  /* Bright Cyan Variants */
-  --bright-cyan-light: #1AFFFF;    /* 10% lighter */
-  --bright-cyan-dark: #00E6E6;     /* 10% darker */
-  
-  /* Neutral Colors for Balance */
-  --dark-bg: #1a1a1a;
-  --darker-bg: #0d0d0d;
-  --light-text: #ffffff;
-  --muted-text: #cccccc;
-  --border: #333333;
-  
-  /* Semantic Color Applications */
-  --primary: var(--electric-blue);
-  --secondary: var(--hot-pink);
-  --accent: var(--neon-purple);
-  --highlight: var(--bright-cyan);
-  
-  /* Text Colors */
-  --text-primary: var(--electric-blue-light);
-  --text-secondary: var(--hot-pink-light);
-  --text-accent: var(--neon-purple-light);
-  --text-highlight: var(--bright-cyan-light);
-}
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+        background: #0d0d0d;
+        overflow: hidden;
+      }
     </style>
   </head>
   <body>
-    <my-element>
-      <h1>Vite + Lit</h1>
+    <my-element 
+      is-open="true"
+      is-expanded="false"
+      thank-you-message="Thank You"
+      recipient-name="Nathalia"
+      sender-signature="With Love"
+    >
+      <div slot="message">
+        <p style="margin: 0; font-size: 1.5rem; line-height: 1.6; color: #ffffff; text-align: center;">
+          Un año lleno de aventuras, risas y momentos únicos.<br>
+          Gracias por hacer cada día especial con tu energía y carisma.
+        </p>
+      </div>
     </my-element>
-  
   </body>
 </html>
