@@ -1,5 +1,8 @@
 import { LitElement, css, html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
+import backwards from './assets/backwards.png';
+import tarjetas from './assets/tarjetas.png';
+import confetti from 'https://esm.run/canvas-confetti@1';
 
 @customElement('my-element')
 export class MyElement extends LitElement {
@@ -27,6 +30,10 @@ export class MyElement extends LitElement {
   private handleCardClick() {
     this.isExpanded = true;
     console.log('open');
+    confetti({
+      particleCount: 150,
+      spread: 60,
+    });
   }
 
   private generateParticles() {
@@ -129,7 +136,7 @@ export class MyElement extends LitElement {
             `
           )}
         </div>
-        <div class="content-grid" @click="${this.handleCardClick}">
+        <div class="content-grid">
           <div class="header-section">
             <h1 class="thank-you-header">${this.thankYouMessage}</h1>
             <div class="click-indicator">
@@ -147,14 +154,13 @@ export class MyElement extends LitElement {
           <div class="title-section">
             <h2 class="fecha">07/16/2024</h2>
             <p class="glow">
-              Hoy celebramos porque mañana hace un año de clases contigo!
-              Aprender es una bendicion, y gracias por estar en mi viaje de
-              aprendizaje.
+              🎉 Hoy celebramos porque hace un año de clases contigo! Aprender
+              es una bendicion, y gracias por estar en mi viaje de aprendizaje.
             </p>
-            <p class="${this.isExpanded ? 'show' : 'hide'}">
+            <p class="glow-purple ${this.isExpanded ? 'show' : 'hide'}">
               Este regalo esta bendicido con abudancia. Lo que compras te
-              ayudara florecer. Algo pa hacer tu vida mas organizada, algo que
-              te ayudaria con el dia a dia :)
+              ayudara florecer 💐. Algo pa' hacer tu vida mas organizada, algo
+              que te ayudaria con el dia a dia :)
             </p>
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -182,60 +188,67 @@ export class MyElement extends LitElement {
 
             <div class="memory-highlights">
               <div class="memory-item">
-                <span class="memory-title">Clase favorita</span>
-                <span class="memory-desc">Cuando me mostraste tu arte.</span>
+                <span class="memory-title">Clase favorita </span>
+                <span class="memory-desc"
+                  >Cuando me mostraste tu arte. Wow. Quiero pintar contigo</span
+                >
               </div>
               <div class="memory-item">
-                <span class="memory-title">Momentos favoritos:</span>
+                <span class="memory-title">Momentos favoritos</span>
                 <span class="memory-desc">
                   Cuando hablas sobre tu vida - de tu viaje por la amazona, de
-                  herbalife jaja, de tu vida en universidad. Vives
+                  herbalife jaja, de tu vida en universidad. Iluminas cuando
+                  hablas y es hermoso.
                 </span>
               </div>
               <div class="memory-item">
-                <span class="memory-title">Tu Magia:</span>
+                <span class="memory-title">Momentos peores</span>
+                <span class="memory-desc"> Cuando hablo 🤣</span>
+              </div>
+              <div class="memory-item">
+                <span class="memory-title">Tu Magia</span>
                 <span class="memory-desc"
-                  >Hablar de los momentos basicos a
-                </span>
+                  >Hablar de los momentos basicos 😮‍💨</span
+                >
               </div>
-              <div>
-                <div class="additional-text">
-                  <p>Sobre yo</p>
-                  <p class="expanded-message">
-                    Espero que me has visto crecer en mi lengua de español.
-                    Enserio, no tengas miedo corregirme. Solo quiero crecer.
-                    Quiero estar afilado en cada aspecto de mi vida. Si escribo
-                    las palabras nuevas, pero necesito mejorar mis sistemas.
-                    <!-- <br /> -->
-                  </p>
-                </div>
-              </div>
-              <p class="gift-emoji"></p>
-              <p>
-                Creo en ti y tus metas. Aqui tienes la opcion para recibir un
-                regalo. No puedes negar este regalo si decides abrirlo jaja ;).
-                Haz click para abrir
-              </p>
-              <button class="gift-button" @click=${this.handleCardClick}>
-                Open gift
-              </button>
-              <div class="gift-reveal ${this.isExpanded ? 'show' : ''}">
-                <div class="image-box">
-                  <p>Amazon gift cards. Mira David</p>
-                </div>
-                <p>
-                  Este regalo esta bendicido con abudancia. Lo que compras te
-                  ayudara florecer. Algo pa hacer tu vida mas organizada, algo
-                  que te ayudaria con el dia a dia :)
+            </div>
+            <div>
+              <div class="additional-text">
+                <p>Sobre yo</p>
+                <p class="expanded-message">
+                  Espero que me has visto crecer en mi lengua de español.
+                  Enserio, no tengas miedo corregirme. Solo quiero crecer.
+                  Quiero estar afilado en cada aspecto de mi vida. Escribo las
+                  palabras nuevas que aprendo, pero necesito mejorar mis
+                  sistemas. Que recomiendas que haga? 🙏
                 </p>
-                <br />
-                <br />
-                <br />
-                <br />
-                <br />
-                <br />
-                <br />
               </div>
+            </div>
+            <p class="gift-emoji"></p>
+            <p>
+              Creo en ti y tus metas. Aqui hay un regalo!!! No puedes negar este
+              regalo si decides abrirlo jaja ;).
+            </p>
+            <button class="gift-button" @click=${this.handleCardClick}>
+              Open gift
+            </button>
+            <div class="gift-reveal ${this.isExpanded ? 'show' : ''}">
+              <div class="image-box">
+                <img class="gift-image" src=${backwards} />
+                <img class="gift-image hover" src=${tarjetas} />
+              </div>
+              <p class="glow-purple">
+                Este regalo esta bendicido con abudancia. Lo que compras te
+                ayudara florecer🌺 💐.💐💐💐 Algo pa hacer tu vida mas
+                organizada, algo que te ayudaria con el dia a dia :) 🌺
+              </p>
+              <br />
+              <br />
+              <br />
+              <br />
+              <br />
+              <br />
+              <br />
             </div>
 
             <div class="signature-section">
@@ -348,6 +361,10 @@ export class MyElement extends LitElement {
       position: relative;
     }
 
+    :host {
+      box-sizing: border-box;
+    }
+
     .card {
       width: 100%;
       height: 100%;
@@ -360,10 +377,11 @@ export class MyElement extends LitElement {
       grid-template-columns: 1.5fr 1.5fr 1fr;
       grid-template-rows: auto auto 1fr auto;
       /* gap: 2rem; */
-      padding: 3rem;
+      padding: 0;
       position: relative;
       transform-origin: center;
       transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      padding: 0 3rem;
     }
 
     .card.open {
@@ -400,6 +418,13 @@ export class MyElement extends LitElement {
       pointer-events: none;
     }
 
+    .glow-purple {
+      color: var(--text-primary);
+      text-shadow: 0 0 5px var(--text-muted);
+      font-size: 22px;
+      animation: glowpurple 2s alternate infinite;
+    }
+
     p,
     .glow {
       color: var(--text-primary);
@@ -407,6 +432,17 @@ export class MyElement extends LitElement {
       animation: glow 3s alternate infinite;
       font-size: 20px;
       line-height: 1.75;
+    }
+
+    @keyframes glowpurple {
+      0% {
+        text-shadow: 0 0 24px var(--text-muted);
+        opacity: 1;
+      }
+      100% {
+        text-shadow: 0 0 3px var(--text-muted);
+        opacity: 0.3;
+      }
     }
 
     @keyframes glow {
@@ -495,7 +531,7 @@ export class MyElement extends LitElement {
     }
 
     .message-section {
-      padding-top: 30rem;
+      padding-top: 35rem;
       padding-right: 2rem;
       grid-area: message;
 
@@ -658,7 +694,7 @@ export class MyElement extends LitElement {
       display: flex;
       flex-direction: column;
       gap: 1rem;
-      margin-top: 1rem;
+      margin-top: 4rem;
     }
 
     .memory-item {
@@ -1010,13 +1046,13 @@ export class MyElement extends LitElement {
     .gift-image {
       width: 200px;
       height: auto;
+      object-fit: contain;
     }
     .gift-image:hover {
-      transform: scale(3);
       /* width: 200px; */
     }
 
-    <button class='gift-button' > Open Gift </button > <style > .gift-button {
+    .gift-button {
       position: relative;
       background: linear-gradient(
         135deg,
@@ -1026,9 +1062,12 @@ export class MyElement extends LitElement {
       color: var(--text-primary);
       font-size: 1.2rem;
       font-weight: bold;
-      padding: 1rem 2rem;
+      padding: 1.5rem 2rem;
       border: none;
       border-radius: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       box-shadow: 0 0 15px var(--primary-light),
         inset 0 0 10px var(--accent-light);
       cursor: pointer;
@@ -1037,45 +1076,12 @@ export class MyElement extends LitElement {
     }
 
     .gift-button:hover {
-      transform: scale(1.1);
+      transform: scale(1);
       box-shadow: 0 0 20px var(--accent-light),
         inset 0 0 15px var(--primary-light);
     }
-
-    .gift-button::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 50%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(
-        135deg,
-        var(--secondary-light),
-        var(--highlight-light)
-      );
-      transform: translateX(-50%) scaleY(0);
-      transform-origin: top;
-      transition: transform 0.3s ease;
-      z-index: -1;
-    }
-
     .gift-button:hover::before {
       transform: translateX(-50%) scaleY(1);
-    }
-
-    .gift-button::after {
-      content: '';
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 50px;
-      height: 50px;
-      background: var(--secondary);
-      border-radius: 50%;
-      box-shadow: 0 0 10px var(--secondary-light);
-      transform: translate(-50%, -50%) scale(0);
-      animation: popEffect 0.5s ease-in-out infinite alternate;
     }
   `;
 }
