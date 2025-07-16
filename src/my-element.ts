@@ -2,7 +2,8 @@ import { LitElement, css, html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import backwards from './assets/backwards.png';
 import tarjetas from './assets/tarjetas.png';
-import confetti from 'https://esm.run/canvas-confetti@1';
+// @ts-ignore
+import confetti from 'canvas-confetti';
 
 @customElement('my-element')
 export class MyElement extends LitElement {
