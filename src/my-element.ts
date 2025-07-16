@@ -221,8 +221,7 @@ export class MyElement extends LitElement {
               </button>
               <div class="gift-reveal ${this.isExpanded ? 'show' : ''}">
                 <div class="image-box">
-                  <img class="gift-image" src="tarjetas.png" />
-                  <img class="gift-image hover" src="backwards.png" />
+                  <p>Amazon gift cards. Mira David</p>
                 </div>
                 <p>
                   Este regalo esta bendicido con abudancia. Lo que compras te
