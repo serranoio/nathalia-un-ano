@@ -240,6 +240,13 @@ export class MyElement extends LitElement {
                   <img class="gift-image" src=${backwards} />
                   <img class="gift-image hover" src=${tarjetas} />
                 </div>
+                <p>
+                  No podia encontrar una manera de enviarte Visa con tarjeta de
+                  regalo. Por eso, tendras que hacer una cuenta de amazon y
+                  usarlo por alli. Pero, si quieres dinero en cambio, puedo usar
+                  las tarjetas de regalo, y puedo enviartelo del banco :).
+                  Quiero hacer la opcion mas facil pa' ti
+                </p>
               </div>
 
               <div class="signature-section">
