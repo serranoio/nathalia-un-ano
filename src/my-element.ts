@@ -100,7 +100,7 @@ export class MyElement extends LitElement {
 
   firstUpdated() {
     this.messageSection = this.shadowRoot?.querySelector(
-      '.message-section'
+      '.message-section-box'
     ) as HTMLElement;
     if (this.messageSection) {
       this.messageSection.addEventListener(
@@ -182,87 +182,78 @@ export class MyElement extends LitElement {
             </svg>
           </div>
 
-          <div class="message-section">
-            <div class="primary-message">
-              <slot name="message"> </slot>
-            </div>
+          <div class="message-section-box">
+            <div class="message-section">
+              <div class="primary-message">
+                <slot name="message"> </slot>
+              </div>
 
-            <div class="memory-highlights">
-              <div class="memory-item">
-                <span class="memory-title">Clase favorita </span>
-                <span class="memory-desc"
-                  >Cuando me mostraste tu arte. Wow. Quiero pintar contigo</span
-                >
+              <div class="memory-highlights">
+                <div class="memory-item">
+                  <span class="memory-title">Clase favorita </span>
+                  <span class="memory-desc"
+                    >Cuando me mostraste tu arte. Wow. Quiero pintar
+                    contigo</span
+                  >
+                </div>
+                <div class="memory-item">
+                  <span class="memory-title">Momentos favoritos</span>
+                  <span class="memory-desc">
+                    Cuando hablas sobre tu vida - de tu viaje por la amazona, de
+                    herbalife jaja, de tu vida en universidad. Iluminas cuando
+                    hablas y es hermoso.
+                  </span>
+                </div>
+                <div class="memory-item">
+                  <span class="memory-title">Momentos peores</span>
+                  <span class="memory-desc"> Cuando hablo 🤣</span>
+                </div>
+                <div class="memory-item">
+                  <span class="memory-title">Tu Magia</span>
+                  <span class="memory-desc"
+                    >Hablar de los momentos basicos 😮‍💨</span
+                  >
+                </div>
               </div>
-              <div class="memory-item">
-                <span class="memory-title">Momentos favoritos</span>
-                <span class="memory-desc">
-                  Cuando hablas sobre tu vida - de tu viaje por la amazona, de
-                  herbalife jaja, de tu vida en universidad. Iluminas cuando
-                  hablas y es hermoso.
-                </span>
+              <div>
+                <div class="additional-text">
+                  <p>Sobre yo</p>
+                  <p class="expanded-message">
+                    Espero que me has visto crecer en mi lengua de español.
+                    Enserio, no tengas miedo corregirme. Solo quiero crecer.
+                    Quiero estar afilado en cada aspecto de mi vida. Escribo las
+                    palabras nuevas que aprendo, pero necesito mejorar mis
+                    sistemas. Que recomiendas que haga? 🙏
+                  </p>
+                </div>
               </div>
-              <div class="memory-item">
-                <span class="memory-title">Momentos peores</span>
-                <span class="memory-desc"> Cuando hablo 🤣</span>
-              </div>
-              <div class="memory-item">
-                <span class="memory-title">Tu Magia</span>
-                <span class="memory-desc"
-                  >Hablar de los momentos basicos 😮‍💨</span
-                >
-              </div>
-            </div>
-            <div>
-              <div class="additional-text">
-                <p>Sobre yo</p>
-                <p class="expanded-message">
-                  Espero que me has visto crecer en mi lengua de español.
-                  Enserio, no tengas miedo corregirme. Solo quiero crecer.
-                  Quiero estar afilado en cada aspecto de mi vida. Escribo las
-                  palabras nuevas que aprendo, pero necesito mejorar mis
-                  sistemas. Que recomiendas que haga? 🙏
-                </p>
-              </div>
-            </div>
-            <p class="gift-emoji"></p>
-            <p>
-              Creo en ti y tus metas. Aqui hay un regalo!!! No puedes negar este
-              regalo si decides abrirlo jaja ;).
-            </p>
-            <button class="gift-button" @click=${this.handleCardClick}>
-              Open gift
-            </button>
-            <div class="gift-reveal ${this.isExpanded ? 'show' : ''}">
-              <div class="image-box">
-                <img class="gift-image" src=${backwards} />
-                <img class="gift-image hover" src=${tarjetas} />
-              </div>
-              <p class="glow-purple">
-                Este regalo esta bendicido con abudancia. Lo que compras te
-                ayudara florecer🌺 💐.💐💐💐 Algo pa hacer tu vida mas
-                organizada, algo que te ayudaria con el dia a dia :) 🌺
+              <p class="gift-emoji"></p>
+              <p>
+                Creo en ti y tus metas. Aqui hay un regalo!!! No puedes negar
+                este regalo si decides abrirlo jaja ;).
               </p>
-              <br />
-              <br />
-              <br />
-              <br />
-              <br />
-              <br />
-              <br />
-            </div>
+              <button class="gift-button" @click=${this.handleCardClick}>
+                Open gift
+              </button>
+              <div class="gift-reveal ${this.isExpanded ? 'show' : ''}">
+                <div class="image-box">
+                  <img class="gift-image" src=${backwards} />
+                  <img class="gift-image hover" src=${tarjetas} />
+                </div>
+              </div>
 
-            <div class="signature-section">
-              ${this.senderSignature
-                ? html`<div class="signature">
-                    From:
-                    <span class="sender-name">${this.senderSignature}</span>
-                  </div>`
-                : ''}
-            </div>
+              <div class="signature-section">
+                ${this.senderSignature
+                  ? html`<div class="signature">
+                      From:
+                      <span class="sender-name">${this.senderSignature}</span>
+                    </div>`
+                  : ''}
+              </div>
 
-            <div class="date-section">
-              <div class="date-stamp">${this.dateStamp}</div>
+              <div class="date-section">
+                <div class="date-stamp">${this.dateStamp}</div>
+              </div>
             </div>
           </div>
 
@@ -285,6 +276,12 @@ export class MyElement extends LitElement {
   }
 
   static styles = css`
+    .message-section-box {
+      height: 47rem;
+      overflow-y: scroll;
+      width: 105%;
+    }
+
     :host {
       /* Jinx Color Palette - Primary Colors */
       --primary: #00bfff; /* Electric Blue */
@@ -532,11 +529,11 @@ export class MyElement extends LitElement {
     }
 
     .message-section {
-      padding-top: 35rem;
+      /* padding-top: 20rem; */
       padding-right: 2rem;
       grid-area: message;
 
-      overflow-y: scroll;
+      overflow: hidden;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -544,7 +541,8 @@ export class MyElement extends LitElement {
       filter: blur(5px); /* Apply blur effect */
       position: relative; /* Position for the arrow */
       transition: filter 0.5s ease; /* Smooth transition for blur removal */
-      height: 80%;
+      /* height: 80%; */
+      height: auto; /* Adjust height to fit all content */
     }
 
     @keyframes softBounceGlow {
@@ -606,16 +604,16 @@ export class MyElement extends LitElement {
     }
 
     /* Custom scrollbar styling */
-    .message-section::-webkit-scrollbar {
+    .message-section-box::-webkit-scrollbar {
       width: 12px; /* Width of the scrollbar */
     }
 
-    .message-section::-webkit-scrollbar-track {
+    .message-section-box::-webkit-scrollbar-track {
       background: var(--dark-bg); /* Background of the scrollbar track */
       border-radius: 10px; /* Rounded corners */
     }
 
-    .message-section::-webkit-scrollbar-thumb {
+    .message-section-box::-webkit-scrollbar-thumb {
       background: linear-gradient(
         135deg,
         var(--primary-light),
@@ -625,7 +623,7 @@ export class MyElement extends LitElement {
       box-shadow: 0 0 10px var(--primary-light); /* Glow effect */
     }
 
-    .message-section::-webkit-scrollbar-thumb:hover {
+    .message-section-box::-webkit-scrollbar-thumb:hover {
       background: linear-gradient(
         135deg,
         var(--primary),
