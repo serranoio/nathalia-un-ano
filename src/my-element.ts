@@ -18,18 +18,121 @@ export class MyElement extends LitElement {
   @property({ type: String })
   dateStamp = new Date().toLocaleDateString();
 
+  @property({ type: Array })
+  particles: Array<{ x: number; y: number; id: string; color: string }> = [];
+
+  private scrollY = 0;
+  private messageSection?: HTMLElement;
+
   private handleCardClick() {
-    this.isExpanded = !this.isExpanded;
+    this.isExpanded = true;
+    console.log('open');
+  }
+
+  private generateParticles() {
+    const particleCount = 80 + Math.floor(Math.random() * 11) - 5; // 20±5
+    this.particles = [];
+
+    for (let i = 0; i < particleCount; i++) {
+      const colors = ['--primary', '--secondary', '--accent', '--highlight'];
+      this.particles.push({
+        x: Math.random() * 100, // percentage
+        y: Math.random() * 100, // percentage
+        id: `particle-${i}`,
+        color: colors[Math.floor(Math.random() * colors.length)],
+      });
+    }
+  }
+
+  private handleScroll(e: Event) {
+    const target = e.target as HTMLElement;
+    this.scrollY = target.scrollTop;
+    this.updateParticlePositions();
+  }
+
+  private updateParticlePositions() {
+    if (!this.messageSection) return;
+
+    const particles = this.shadowRoot?.querySelectorAll('.dynamic-particle');
+    particles?.forEach((particle, index) => {
+      const particleElement = particle as HTMLElement;
+      const baseY = this.particles[index]?.y || 0;
+
+      // Ease-in-out scroll effect
+      // const randomFactor = Math.floor(Math.random() * 100) / 100 - 0.01;
+
+      const scrollFactor = Math.sin(this.scrollY * 0.01) * 20;
+
+      console.log(scrollFactor);
+      const newY = baseY - scrollFactor;
+
+      particleElement.style.top = `${newY}vh`;
+
+      // particleElement.style.transform = `translate(0, ${newY}px)`;
+
+      // Fade based on viewport position
+      const rect = particleElement.getBoundingClientRect();
+      const viewportHeight = window.innerHeight;
+      const isInRange = rect.top >= 40 && rect.bottom <= viewportHeight - 40;
+
+      particleElement.style.opacity = isInRange ? '1' : '0.3';
+      particleElement.style.transition = 'opacity 0.3s ease-in-out';
+      if (rect.bottom >= viewportHeight - 40) {
+        particleElement.style.top = `calc(0vh - 60px)`;
+      } else if (rect.top <= 40) {
+        particleElement.style.top = `calc(100vh - 60px)`;
+      }
+    });
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+    this.generateParticles();
+  }
+
+  firstUpdated() {
+    this.messageSection = this.shadowRoot?.querySelector(
+      '.message-section'
+    ) as HTMLElement;
+    if (this.messageSection) {
+      this.messageSection.addEventListener(
+        'scroll',
+        this.handleScroll.bind(this)
+      );
+    }
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    if (this.messageSection) {
+      this.messageSection.removeEventListener(
+        'scroll',
+        this.handleScroll.bind(this)
+      );
+    }
   }
 
   render() {
     return html`
-      <div class="card  ${this.isExpanded ? 'expanded' : 'collapsed'}">
-        <div class="particles"></div>
-        <div class="content-grid">
+      <div class="card">
+        <div class="particles">
+          ${this.particles.map(
+            (particle) => html`
+              <div
+                class="spark dynamic-particle"
+                style="
+                --particle-color: var(${particle.color});
+                left: ${particle.x}vw;
+                top: ${particle.y}vh;
+              "
+              ></div>
+            `
+          )}
+        </div>
+        <div class="content-grid" @click="${this.handleCardClick}">
           <div class="header-section">
             <h1 class="thank-you-header">${this.thankYouMessage}</h1>
-            <div class="click-indicator ${this.isExpanded ? 'hidden' : ''}">
+            <div class="click-indicator">
               <div class="pulse-ring"></div>
             </div>
           </div>
@@ -47,6 +150,11 @@ export class MyElement extends LitElement {
               Hoy celebramos porque mañana hace un año de clases contigo!
               Aprender es una bendicion, y gracias por estar en mi viaje de
               aprendizaje.
+            </p>
+            <p class="${this.isExpanded ? 'show' : 'hide'}">
+              Este regalo esta bendicido con abudancia. Lo que compras te
+              ayudara florecer. Algo pa hacer tu vida mas organizada, algo que
+              te ayudaria con el dia a dia :)
             </p>
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -69,72 +177,95 @@ export class MyElement extends LitElement {
 
           <div class="message-section">
             <div class="primary-message">
-              <slot name="message">
-                <p class="message-body">
-                  Your kindness and support mean the world to me.
-                </p>
-              </slot>
-            </div>
-
-            <div class="additional-text">
-              <p class="expanded-message">
-                🎆 Cada momento contigo ha sido una explosión de alegría<br />
-                ⚡ Tu energía ilumina hasta los días más oscuros<br />
-                🌟 Gracias por ser tan auténtica y especial<br />
-                💙 Este año ha sido increíble gracias a ti
-              </p>
+              <slot name="message"> </slot>
             </div>
 
             <div class="memory-highlights">
               <div class="memory-item">
-                <span class="memory-title">Aventuras Favoritas:</span>
-                <span class="memory-desc"
-                  >Esas risas que no pueden contenerse</span
-                >
+                <span class="memory-title">Clase favorita</span>
+                <span class="memory-desc">Cuando me mostraste tu arte.</span>
               </div>
               <div class="memory-item">
-                <span class="memory-title">Momentos Únicos:</span>
-                <span class="memory-desc"
-                  >Conversaciones hasta altas horas</span
-                >
+                <span class="memory-title">Momentos favoritos:</span>
+                <span class="memory-desc">
+                  Cuando hablas sobre tu vida - de tu viaje por la amazona, de
+                  herbalife jaja, de tu vida en universidad. Vives
+                </span>
               </div>
               <div class="memory-item">
                 <span class="memory-title">Tu Magia:</span>
                 <span class="memory-desc"
-                  >Convertir lo ordinario en extraordinario</span
-                >
+                  >Hablar de los momentos basicos a
+                </span>
               </div>
+              <div>
+                <div class="additional-text">
+                  <p>Sobre yo</p>
+                  <p class="expanded-message">
+                    Espero que me has visto crecer en mi lengua de español.
+                    Enserio, no tengas miedo corregirme. Solo quiero crecer.
+                    Quiero estar afilado en cada aspecto de mi vida. Si escribo
+                    las palabras nuevas, pero necesito mejorar mis sistemas.
+                    <!-- <br /> -->
+                  </p>
+                </div>
+              </div>
+              <p class="gift-emoji"></p>
+              <p>
+                Creo en ti y tus metas. Aqui tienes la opcion para recibir un
+                regalo. No puedes negar este regalo si decides abrirlo jaja ;).
+                Haz click para abrir
+              </p>
+              <button class="gift-button" @click=${this.handleCardClick}>
+                Open gift
+              </button>
+              <div class="gift-reveal ${this.isExpanded ? 'show' : ''}">
+                <div class="image-box">
+                  <img class="gift-image" src="tarjetas.png" />
+                  <img class="gift-image hover" src="backwards.png" />
+                </div>
+                <p>
+                  Este regalo esta bendicido con abudancia. Lo que compras te
+                  ayudara florecer. Algo pa hacer tu vida mas organizada, algo
+                  que te ayudaria con el dia a dia :)
+                </p>
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+              </div>
+            </div>
+
+            <div class="signature-section">
+              ${this.senderSignature
+                ? html`<div class="signature">
+                    From:
+                    <span class="sender-name">${this.senderSignature}</span>
+                  </div>`
+                : ''}
+            </div>
+
+            <div class="date-section">
+              <div class="date-stamp">${this.dateStamp}</div>
             </div>
           </div>
 
-          <div class="signature-section">
-            ${this.senderSignature
-              ? html`<div class="signature">
-                  From: <span class="sender-name">${this.senderSignature}</span>
-                </div>`
-              : ''}
-          </div>
-
-          <div class="date-section">
-            <div class="date-stamp">${this.dateStamp}</div>
+          <div class="decorative-elements">
+            <div class="hex-frame"></div>
+            <div class="angular-border"></div>
             ${this.isExpanded
-              ? html`<div class="celebration-text">¡Un año increíble! 🎉</div>`
+              ? html`
+                  <div class="extra-particles">
+                    <div class="spark spark-1"></div>
+                    <div class="spark spark-2"></div>
+                    <div class="spark spark-3"></div>
+                  </div>
+                `
               : ''}
           </div>
-        </div>
-
-        <div class="decorative-elements">
-          <div class="hex-frame"></div>
-          <div class="angular-border"></div>
-          ${this.isExpanded
-            ? html`
-                <div class="extra-particles">
-                  <div class="spark spark-1"></div>
-                  <div class="spark spark-2"></div>
-                  <div class="spark spark-3"></div>
-                </div>
-              `
-            : ''}
         </div>
       </div>
     `;
@@ -236,16 +367,6 @@ export class MyElement extends LitElement {
       transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     }
 
-    .card.expanded {
-      transform: scale(1.02);
-      filter: brightness(1.1);
-    }
-
-    .card.closed {
-      transform: scale(0.95) rotateY(-5deg);
-      opacity: 0.8;
-    }
-
     .card.open {
       transform: scale(1) rotateY(0deg);
       opacity: 1;
@@ -280,20 +401,23 @@ export class MyElement extends LitElement {
       pointer-events: none;
     }
 
+    p,
     .glow {
       color: var(--text-primary);
       text-shadow: 0 0 5px var(--text-muted);
-      animation: glow 6s ease-in-out infinite;
+      animation: glow 3s alternate infinite;
       font-size: 20px;
       line-height: 1.75;
     }
 
     @keyframes glow {
       0% {
-        text-shadow: 0 0 5px var(--text-muted);
+        text-shadow: 0 0 6px var(--text-muted);
+        opacity: 0.9;
       }
       100% {
-        text-shadow: 0 0 4px var(--text-muted);
+        text-shadow: 0 0 3px var(--text-muted);
+        opacity: 0.6;
       }
     }
 
@@ -372,7 +496,7 @@ export class MyElement extends LitElement {
     }
 
     .message-section {
-      padding-top: 5rem;
+      padding-top: 30rem;
       padding-right: 2rem;
       grid-area: message;
 
@@ -384,6 +508,7 @@ export class MyElement extends LitElement {
       filter: blur(5px); /* Apply blur effect */
       position: relative; /* Position for the arrow */
       transition: filter 0.5s ease; /* Smooth transition for blur removal */
+      height: 80%;
     }
 
     @keyframes softBounceGlow {
@@ -428,6 +553,10 @@ export class MyElement extends LitElement {
 
     .message-section:hover {
       filter: none; /* Remove blur effect */
+    }
+
+    .message-section:hover .card {
+      transform: scale(1.05);
     }
 
     @keyframes arrowBounce {
@@ -746,6 +875,25 @@ export class MyElement extends LitElement {
       animation: sparkle 1.5s ease-in-out infinite;
     }
 
+    .dynamic-particle {
+      background: var(--particle-color, var(--primary));
+      box-shadow: 0 0 10px var(--particle-color, var(--primary));
+      transition: all 0.5s;
+      animation: sparkle 2s ease-in-out infinite;
+    }
+
+    .dynamic-particle:nth-child(odd) {
+      animation-delay: 0.5s;
+    }
+
+    .dynamic-particle:nth-child(3n) {
+      animation-delay: 1s;
+    }
+
+    .dynamic-particle:nth-child(4n) {
+      animation-delay: 1.5s;
+    }
+
     .spark-1 {
       background: var(--secondary);
       top: 30%;
@@ -836,6 +984,99 @@ export class MyElement extends LitElement {
       .expanded-content.visible {
         max-height: 600px;
       }
+    }
+
+    .image-box {
+      display: flex;
+    }
+
+    .gift-reveal {
+      opacity: 0;
+      transition: all 1s;
+    }
+
+    .show {
+      transition: all 1s;
+      opacity: 1;
+    }
+
+    .hide {
+      opacity: 0 !important;
+    }
+
+    .gift-reveal.show {
+      opacity: 1;
+    }
+
+    .gift-image {
+      width: 200px;
+      height: auto;
+    }
+    .gift-image:hover {
+      transform: scale(3);
+      /* width: 200px; */
+    }
+
+    <button class='gift-button' > Open Gift </button > <style > .gift-button {
+      position: relative;
+      background: linear-gradient(
+        135deg,
+        var(--primary-light),
+        var(--accent-light)
+      );
+      color: var(--text-primary);
+      font-size: 1.2rem;
+      font-weight: bold;
+      padding: 1rem 2rem;
+      border: none;
+      border-radius: 10px;
+      box-shadow: 0 0 15px var(--primary-light),
+        inset 0 0 10px var(--accent-light);
+      cursor: pointer;
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease all 0.2s;
+    }
+
+    .gift-button:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 20px var(--accent-light),
+        inset 0 0 15px var(--primary-light);
+    }
+
+    .gift-button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+        135deg,
+        var(--secondary-light),
+        var(--highlight-light)
+      );
+      transform: translateX(-50%) scaleY(0);
+      transform-origin: top;
+      transition: transform 0.3s ease;
+      z-index: -1;
+    }
+
+    .gift-button:hover::before {
+      transform: translateX(-50%) scaleY(1);
+    }
+
+    .gift-button::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 50px;
+      height: 50px;
+      background: var(--secondary);
+      border-radius: 50%;
+      box-shadow: 0 0 10px var(--secondary-light);
+      transform: translate(-50%, -50%) scale(0);
+      animation: popEffect 0.5s ease-in-out infinite alternate;
     }
   `;
 }
